@@ -13,10 +13,34 @@ router.get('/',(req,res)=>{  //Butun filmleri getiren endpoint
   });
 });
 
-router.get('/:movie_id', (req,res)=>{       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
-
+router.get('/:movie_id', (req,res,next)=>{       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
+  const promise = Movie.findById(req.params.movie_id);
+  promise.then((movie)=>{
+    if(!movie)
+      next({message: 'Movie was not found!', code: -1});
+    res.json(movie);
+  }).catch((err)=>{
+    res.json(err);
+  });
 });
 
+router.put('/:movie_id', (req,res,next)=>{       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
+  const promise = Movie.findByIdAndUpdate(
+    req.params.movie_id, 
+    req.body,
+    {
+      new: true,
+    }
+    );
+
+  promise.then((movie)=>{
+    if(!movie)
+      next({message: 'Movie was not found!', code: -1});
+    res.json(movie);
+  }).catch((err)=>{
+    res.json(err);
+  });
+});
 
 router.post('/', function(req, res, next) {
 /*const { title, imdb_score, category, country, year } = req.body;
