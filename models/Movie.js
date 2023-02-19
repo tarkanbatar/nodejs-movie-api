@@ -5,7 +5,9 @@ const MovieSchema = new Schema({
     director_id: Schema.Types.ObjectId,
     title: {
         type: String,
-        required: true,
+        required: [true, '`{PATH}` alani zorunludur'], //! {PATH} kismi title kismini verecektir
+        maxlength: [50, '`{PATH}` alani {MAXLENGHT} karakterden uzun olamaz!'],
+        minlenght: [1, '`{PATH}` alani {MINLENGHT} karakterden kisa olamaz']  //! sartlarin saglanmadigi durumda bunlar hata mesaji olarak yazilacaktir
     },
     category: String,
     country: String,
