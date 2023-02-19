@@ -5,7 +5,7 @@ const router = express.Router();
 //* Models
 const Director = require('../models/Director');
 
-router.get('/',(req,res,next)=>{
+router.get('/', (req, res, next) => {
     const promise = Director.aggregate([
         {
             $lookup: {          //! Burada movies ile join islemi yapiyoruz
@@ -23,8 +23,8 @@ router.get('/',(req,res,next)=>{
         },
         {
             $group: {       //! eger bu ifade kullanilmazsa join yapilan parametre ile eslesen butun kayitlar ayri ayri kayit olarak gosterilecektir
-                            //! yani bizim projede yaptigimiz bir directore ait her bir film ayri ayri kayitlar halinde gelecektir fakat group islemi yaparak 
-                            //! bunlarin her birini tek kayit altinda toplayabiliyoruz. Burada gormek istedigimiz formati belirliyoruz.
+                //! yani bizim projede yaptigimiz bir directore ait her bir film ayri ayri kayitlar halinde gelecektir fakat group islemi yaparak 
+                //! bunlarin her birini tek kayit altinda toplayabiliyoruz. Burada gormek istedigimiz formati belirliyoruz.
                 _id: {
                     _id: '_id',
                     name: '$name',
@@ -34,7 +34,7 @@ router.get('/',(req,res,next)=>{
                 movies: {
                     $push: '$movies'   //! unwind icindeki data ne ise buraya yazilacak
                 }
-            }   
+            }
         },
         //! eger donen response icinde id basliginin '_id' olarak gorunmesini istemiyorsak $project ile degistiririz
         {
@@ -47,16 +47,14 @@ router.get('/',(req,res,next)=>{
         }
     ]);
 
-    promise.then((data)=>{
+    promise.then((data) => {
         res.json(data);
-    }).catch((err)=>{
+    }).catch((err) => {
         res.json(err);
     });
 });
 
-router.get('/:director_id',(req,res,next)=>{
-
-
+router.get('/:director_id', (req, res, next) => {
     const promise = Director.aggregate([
         {
             $match: {
@@ -79,8 +77,8 @@ router.get('/:director_id',(req,res,next)=>{
         },
         {
             $group: {       //! eger bu ifade kullanilmazsa join yapilan parametre ile eslesen butun kayitlar ayri ayri kayit olarak gosterilecektir
-                            //! yani bizim projede yaptigimiz bir directore ait her bir film ayri ayri kayitlar halinde gelecektir fakat group islemi yaparak 
-                            //! bunlarin her birini tek kayit altinda toplayabiliyoruz. Burada gormek istedigimiz formati belirliyoruz.
+                //! yani bizim projede yaptigimiz bir directore ait her bir film ayri ayri kayitlar halinde gelecektir fakat group islemi yaparak 
+                //! bunlarin her birini tek kayit altinda toplayabiliyoruz. Burada gormek istedigimiz formati belirliyoruz.
                 _id: {
                     _id: '_id',
                     name: '$name',
@@ -90,7 +88,7 @@ router.get('/:director_id',(req,res,next)=>{
                 movies: {
                     $push: '$movies'   //! unwind icindeki data ne ise buraya yazilacak
                 }
-            }   
+            }
         },
         //! eger donen response icinde id basliginin '_id' olarak gorunmesini istemiyorsak $project ile degistiririz
         {
@@ -103,9 +101,26 @@ router.get('/:director_id',(req,res,next)=>{
         }
     ]);
 
-    promise.then((data)=>{
+    promise.then((data) => {
         res.json(data);
-    }).catch((err)=>{
+    }).catch((err) => {
+        res.json(err);
+    });
+});
+
+router.put('/:director_id', (req, res, next) => {       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
+    const promise = Director.findByIdAndUpdate(
+        req.params.director_id,
+        req.body,
+        {
+            new: true,
+        }
+    );
+    promise.then((director) => {
+        if (!director)
+            next({ message: 'Director was not found!', code: -1 });
+        res.json(director);
+    }).catch((err) => {
         res.json(err);
     });
 });
@@ -123,9 +138,20 @@ router.post('/', (req, res, next) => {
     const director = new Director(req.body);
 
     const promise = director.save();
-    promise.then((data)=>{
-        res.json({ status: 1});
-    }).catch((err)=>{
+    promise.then((data) => {
+        res.json({ status: 1 });
+    }).catch((err) => {
+        res.json(err);
+    });
+});
+
+router.delete('/:director_id', (req, res, next) => {       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
+    const promise = Director.findByIdAndRemove(req.params.director_id, { new: true });
+    promise.then((director) => {
+        if (!director)
+            next({ message: 'Director was not found!', code: -1 });
+        res.json(director);
+    }).catch((err) => {
         res.json(err);
     });
 });
