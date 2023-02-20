@@ -17,6 +17,9 @@ const db = require('./connections/db')();
 const config = require('./config');
 app.set('api_secret_key', config.api_secret_key);
 
+//* jwt middleware
+const verifyToken = require('./middleware/verify-token');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,6 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/api', verifyToken);  //! api routeu altindaki butun sayfalar icin kullanicinin bu middlewareden gecmesi gerekiyor
 app.use('/api/movies', movies);
 app.use('/api/directors', directors);
 
