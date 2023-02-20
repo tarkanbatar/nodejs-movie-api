@@ -39,12 +39,12 @@ router.post('/authenticate', (req,res) => {
   User.findOne({username},(err,user)=>{
     if(err)
       throw err;
-    if(!user){
+    if(!user) {
       res.json({
         statur: false,
         message: 'Authentication failed!'
       });
-    }else{
+    } else {
       bcrypt.compare(password, user.password).then((result)=>{
         if(!result){
           res.json({
