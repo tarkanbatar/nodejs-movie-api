@@ -13,6 +13,11 @@ const app = express();
 //! DB Connection
 const db = require('./connections/db')();
 
+//* jwt config dosyasi  
+const config = require('./config');
+app.set('api_secret_key', config.api_secret_key);
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
