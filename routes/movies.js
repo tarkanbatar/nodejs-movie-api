@@ -18,7 +18,7 @@ router.get('/', (req, res) => {  //Butun filmleri getiren endpoint
       path: '$director'
     }
   }
-]);
+  ]);
   promise.then((data) => {
     res.json(data);
   }).catch((err) => {
@@ -57,7 +57,7 @@ router.get('/between/:start_year/:end_year', (req, res, next) => {       //URL'd
         //! bu veriler string geldigi icin stringten int'e parse etmemiz gerekiyor.
       }
     }
-    );
+  );
   promise.then((movie) => {
     if (!movie)
       next({ message: 'Movie was not found!', code: -1 });
@@ -84,13 +84,13 @@ router.put('/:movie_id', (req, res, next) => {       //URL'de gonderilen id numa
   });
 });
 
-router.delete('/:movie_id', (req,res,next)=>{       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
-  const promise = Movie.findByIdAndRemove(req.params.movie_id,{new: true});
-  promise.then((movie)=>{
-    if(!movie)
-      next({message: 'Movie was not found!', code: -1});
-    res.json({status: 1});
-  }).catch((err)=>{
+router.delete('/:movie_id', (req, res, next) => {       //URL'de gonderilen id numarasi req.params degiskenine dusecek ve biz bu bilgiye oradan ulasip kullanacagiz.
+  const promise = Movie.findByIdAndRemove(req.params.movie_id, { new: true });
+  promise.then((movie) => {
+    if (!movie)
+      next({ message: 'Movie was not found!', code: -1 });
+    res.json({ status: 1 });
+  }).catch((err) => {
     res.json(err);
   });
 });

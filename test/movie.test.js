@@ -32,8 +32,8 @@ describe('/api/movies tests', () => {  //* Describelar it'leri kapsar yani bir d
         });
     });
 
-    describe('/POST movie',()=>{
-        it('it should create a new movie entity', (done)=>{
+    describe('/POST movie', () => {
+        it('it should create a new movie entity', (done) => {
             const movie = {
                 title: 'udemy',
                 director_id: '63f126d8ef0f843fb34c59a7',
@@ -47,7 +47,7 @@ describe('/api/movies tests', () => {  //* Describelar it'leri kapsar yani bir d
                 .post('/api/movies')
                 .send(movie)
                 .set('x-access-token', token)
-                .end((err,res) => {
+                .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.a.property('title');
@@ -62,12 +62,12 @@ describe('/api/movies tests', () => {  //* Describelar it'leri kapsar yani bir d
         });
     });
 
-    describe('/GET/movie_id movie', ()=>{
-        it('It should get a movie by the given id', (done)=>{
+    describe('/GET/movie_id movie', () => {
+        it('It should get a movie by the given id', (done) => {
             chai.request(server)
-                .get('/api/movies/'+movieId)
+                .get('/api/movies/' + movieId)
                 .set('x-access-token', token)
-                .end((err,res)=>{
+                .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.a.property('title');
@@ -82,8 +82,8 @@ describe('/api/movies tests', () => {  //* Describelar it'leri kapsar yani bir d
         });
     });
 
-    describe('/PUT/:movie_id movie',()=>{
-        it('it should UPDATE a movie entity', (done)=>{
+    describe('/PUT/:movie_id movie', () => {
+        it('it should UPDATE a movie entity', (done) => {
             const movie = {
                 title: 'Ezgi',
                 director_id: '63f126d8ef0f843fb34c59a1',
@@ -94,10 +94,10 @@ describe('/api/movies tests', () => {  //* Describelar it'leri kapsar yani bir d
             }
 
             chai.request(server)
-                .put('/api/movies/'+movieId)
+                .put('/api/movies/' + movieId)
                 .send(movie)
                 .set('x-access-token', token)
-                .end((err,res) => {
+                .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.a.property('title').eql(movie.title);
@@ -112,12 +112,12 @@ describe('/api/movies tests', () => {  //* Describelar it'leri kapsar yani bir d
     });
 
 
-    describe('/DELETE/:movie_id movie',()=>{
+    describe('/DELETE/:movie_id movie', () => {
         it('it should DELETE a movie entity', (done) => {
             chai.request(server)
-                .delete('/api/movies/'+movieId)
+                .delete('/api/movies/' + movieId)
                 .set('x-access-token', token)
-                .end((err,res) => {
+                .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.a.property('status').eql(1);
