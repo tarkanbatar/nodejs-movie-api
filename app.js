@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', indexRouter);  //! heroku nedense burada hata veriyor
 app.use('/api', verifyToken);  //! api routeu altindaki butun sayfalar icin kullanicinin bu middlewareden gecmesi gerekiyor
 app.use('/api/movies', movies);
 app.use('/api/directors', directors);
